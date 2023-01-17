@@ -1,9 +1,10 @@
 package com.example.konyvtarasztali;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Statisztika {
     private static List<Konyv> konyvek;
@@ -14,9 +15,22 @@ public class Statisztika {
             System.out.printf("500 oldalnál hosszabb könyvek száma: %d\n", get500oldalnalHosszabbKonyvekSzama());
             System.out.printf("%s 1950-nél régebbi könyv\n", is1950nelRegebbi()? "Van" : "Nincs");
             System.out.printf("A leghosszabb könyv:\n%s\n", getLeghosszabbKonyv());;
+            System.out.printf("A legtöbb könyvvel rendelkező szerző: %s\n", getLegtobbKonyvvelRendelkezoSzerzo());
         } catch (SQLException e) {
             System.out.println("Hiba történt az adatbázis kapcsolat kialakításakor");
         }
+    }
+
+    private static String getLegtobbKonyvvelRendelkezoSzerzo() {
+        return konyvek.stream()
+                // Map objektumot készítek, melynek kulcsa a szerző, értéke, hogy hány könyvvel rendelkezik a szerző
+                .collect(Collectors.groupingBy(Konyv::getAuthor, Collectors.counting()))
+                // A map bejegyzéseiből stream-et készítek
+                .entrySet().stream()
+                // Maximum kiválasztás a könyvek száma alapján
+                .max(Comparator.comparingLong(Map.Entry::getValue))
+                // Maximális érték kulcsát (szerző) adom vissza
+                .get().getKey();
     }
 
     private static Konyv getLeghosszabbKonyv() {
