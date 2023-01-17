@@ -7,7 +7,7 @@ public class Main {
         if (Arrays.asList(args).contains("--stat")) {
             Statisztika.main(args);
         } else {
-            HelloApplication.main(args);
+            GUI.main(args);
         }
     }
 }

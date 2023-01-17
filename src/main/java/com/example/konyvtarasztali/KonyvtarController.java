@@ -3,7 +3,7 @@ package com.example.konyvtarasztali;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class KonyvtarController {
     @FXML
     private Label welcomeText;
 
