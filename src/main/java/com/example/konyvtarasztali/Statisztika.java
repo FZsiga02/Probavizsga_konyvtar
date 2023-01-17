@@ -11,9 +11,14 @@ public class Statisztika {
         try {
             beolvas();
             System.out.printf("500 oldalnál hosszabb könyvek száma: %d\n", get500oldalnalHosszabbKonyvekSzama());
+            System.out.printf("%s 1950-nél régebbi könyv\n", is1950nelRegebbi()? "Van" : "Nincs");
         } catch (SQLException e) {
             System.out.println("Hiba történt az adatbázis kapcsolat kialakításakor");
         }
+    }
+
+    private static boolean is1950nelRegebbi() {
+        return konyvek.stream().anyMatch(konyv -> konyv.getPublish_year() < 1950);
     }
 
     private static long get500oldalnalHosszabbKonyvekSzama() {
