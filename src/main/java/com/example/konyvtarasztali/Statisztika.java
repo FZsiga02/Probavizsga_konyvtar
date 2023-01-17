@@ -2,6 +2,7 @@ package com.example.konyvtarasztali;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Statisztika {
@@ -12,9 +13,14 @@ public class Statisztika {
             beolvas();
             System.out.printf("500 oldalnál hosszabb könyvek száma: %d\n", get500oldalnalHosszabbKonyvekSzama());
             System.out.printf("%s 1950-nél régebbi könyv\n", is1950nelRegebbi()? "Van" : "Nincs");
+            System.out.printf("A leghosszabb könyv:\n%s\n", getLeghosszabbKonyv());;
         } catch (SQLException e) {
             System.out.println("Hiba történt az adatbázis kapcsolat kialakításakor");
         }
+    }
+
+    private static Konyv getLeghosszabbKonyv() {
+        return konyvek.stream().max(Comparator.comparingInt(Konyv::getPage_count)).get();
     }
 
     private static boolean is1950nelRegebbi() {
