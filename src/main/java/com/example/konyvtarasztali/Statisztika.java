@@ -1,9 +1,7 @@
 package com.example.konyvtarasztali;
 
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Statisztika {
@@ -16,9 +14,31 @@ public class Statisztika {
             System.out.printf("%s 1950-nél régebbi könyv\n", is1950nelRegebbi()? "Van" : "Nincs");
             System.out.printf("A leghosszabb könyv:\n%s\n", getLeghosszabbKonyv());;
             System.out.printf("A legtöbb könyvvel rendelkező szerző: %s\n", getLegtobbKonyvvelRendelkezoSzerzo());
+            String cim = cimOlvasasaKonzolrol();
+            String szerzo = getSzerzo(cim);
+            if (szerzo == null) {
+                System.out.println("Nincs ilyen könyv");
+            } else {
+                System.out.printf("Az adott könyv szerzője %s", szerzo);
+            }
         } catch (SQLException e) {
             System.out.println("Hiba történt az adatbázis kapcsolat kialakításakor");
         }
+    }
+
+    private static String getSzerzo(String cim) {
+        Optional<Konyv> optional = konyvek.stream().filter(konyv -> konyv.getTitle()
+                .equals(cim)).findFirst();
+        if (optional.isEmpty()) {
+            return null;
+        }
+        return optional.get().getAuthor();
+    }
+
+    private static String cimOlvasasaKonzolrol() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Adjon meg egy könyv címet: ");
+        return sc.nextLine();
     }
 
     private static String getLegtobbKonyvvelRendelkezoSzerzo() {
